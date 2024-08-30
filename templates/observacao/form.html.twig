@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+    <h1>{{ title }}</h1>
+    <form class="row g-3 needs-validation novalidate" enctype="multipart/form-data">
+        <input type="hidden" name="consulta_id" value="{{ consulta.id }}">
+        <div class="mb-3">
+            <label for="inputdescricao" class="form-label">Observação</label>
+            <textarea type="text" id="inputdescricao" name="descricao" class="form-control" required>{{ observacao ? observacao.descricao : "" }}</textarea>
+        </div>
+        <div class="mb-3">
+            <label for="inputanexo" class="form-label">Anexo</label>
+            <input type="file" id="inputanexo" name="anexo" class="form-control" accept="application/pdf, image/png, image/jpeg">
+        </div>
+        {% if (observacao and observacao.anexo != "") %}
+        <div class="mb-3">
+            <label for="inputanexo" class="form-label">Visualizar</label>
+            <a target="_blank" class="btn btn-info" href="/uploads/{{ observacao.anexo }}">Visualizar anexo</a>
+        </div>
+        {% endif %}
+        <a onclick="{{ observacao ? "edit(#{observacao.id});" : "add();" }}" class="btn btn-primary float-end">Salvar</a>
+    </form>
+{% endblock %}
+
+{% block bodyjs %}
+    <script>
+        function add() {
+            let formData = new FormData($("form")[0]);
+            let valid = true;
+
+            if(formData.get("descricao") == "" || formData.get("descricao").length < 3) {
+                $("#inputdescricao").addClass("is-invalid");
+                valid = false;
+            }else $("#inputdescricao").removeClass("is-invalid");
+
+            if(valid){
+                $.ajax({
+                    url: "/observacao/add",
+                    method: "POST",
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        alert("Salvo com sucesso");
+                        window.location.href = "/observacao/{{ consulta.id }}";
+                    },
+                    error: function(response) {
+                        alert(JSON.parse(response.responseText.toString()));
+                    }
+                });
+            }else{
+                alert("Está faltando campos a serem preenchidos");
+            }
+        }
+        function edit(id) {
+            let formData = new FormData($("form")[0]);
+            let valid = true;
+
+            if(formData.get("descricao") == "" || formData.get("descricao").length < 3) {
+                $("#inputdescricao").addClass("is-invalid");
+                valid = false;
+            }else $("#inputdescricao").removeClass("is-invalid");
+
+            if(valid){
+                $.ajax({
+                    url: "/observacao/edit/" + id,
+                    method: "POST",
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        alert("Salvo com sucesso");
+                        window.location.href = "/observacao/{{ consulta.id }}";
+                    },
+                    error: function(response) {
+                        alert(JSON.parse(response.responseText.toString()));
+                    }
+                });
+            }else{
+                alert("Está faltando campos a serem preenchidos");
+            }
+        }
+    </script>
+{% endblock %}

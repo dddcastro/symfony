@@ -1,0 +1,125 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+    <h1>{{ title }}</h1>
+    <form class="row g-3 needs-validation novalidate">
+        <div class="mb-3">
+            <label for="inputnome" class="form-label">Nome</label>
+            <input type="text" id="inputnome" name="nome" class="form-control" value="{{ beneficiario ? beneficiario.nome : "" }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="inputemail" class="form-label">Email</label>
+            <input type="email" id="inputemail" name="email" class="form-control" value="{{ beneficiario ? beneficiario.email : "" }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="inputdata_nascimento" class="form-label">Data de Nascimento</label>
+            <input type="date" id="inputdata_nascimento" name="data_nascimento" class="form-control" value="{{ beneficiario ? beneficiario.datanascimento|date("Y-m-d") : "" }}" required>
+        </div>
+        <a onclick="{{ beneficiario ? "edit(#{beneficiario.id});" : "add();" }}" class="btn btn-primary float-end">Salvar</a>
+    </form>
+{% endblock %}
+
+{% block bodyjs %}
+    <script>
+        function add() {
+            let formData = new FormData($("form")[0]);
+            let valid = true;
+
+            if(formData.get("nome") == "" || formData.get("nome").length < 3) {
+                $("#inputnome").addClass("is-invalid");
+                valid = false;
+            }else $("#inputnome").removeClass("is-invalid");
+
+            if( !validateEmail(formData.get("email")) ) {
+                $("#inputemail").addClass("is-invalid");
+                valid = false;
+            }else $("#inputemail").removeClass("is-invalid");
+
+            if(formData.get("data_nascimento") == ""  || formData.get("data_nascimento").length < 3) {
+                $("#inputdata_nascimento").addClass("is-invalid");
+                valid = false;
+            }else $("#inputdata_nascimento").removeClass("is-invalid");
+
+            if(!checkMaior18(formData.get("data_nascimento"))) return alert("O beneficiario tem que ser maior de idade");
+
+            if(valid){
+                $.ajax({
+                    url: "/beneficiario/add",
+                    method: "POST",
+                    data: {nome: formData.get('nome'), email: formData.get('email'), data_nascimento: formData.get('data_nascimento')},
+                    success: function(response) {
+                        alert("Salvo com sucesso");
+                        window.location.href = "/beneficiario";
+                    },
+                    error: function(response) {
+                        alert("Ocorreu algum erro ao salvar!");
+                    }
+                });
+            }else{
+                alert("Está faltando campos a serem preenchidos");
+            }
+        }
+        function edit(id) {
+            let formData = new FormData($("form")[0]);
+            let valid = true;
+
+            if(formData.get("nome") == "" || formData.get("nome").length < 3) {
+                $("#inputnome").addClass("is-invalid");
+                valid = false;
+            }else $("#inputnome").removeClass("is-invalid");
+
+            if( !validateEmail(formData.get("email")) ) {
+                $("#inputemail").addClass("is-invalid");
+                valid = false;
+            }else $("#inputemail").removeClass("is-invalid");
+
+            if(formData.get("data_nascimento") == ""  || formData.get("data_nascimento").length < 3) {
+                $("#inputdata_nascimento").addClass("is-invalid");
+                valid = false;
+            }else $("#inputdata_nascimento").removeClass("is-invalid");
+
+            if(!checkMaior18(formData.get("data_nascimento"))) return alert("O beneficiario tem que ser maior de idade");
+
+            if(valid){
+                $.ajax({
+                    url: "/beneficiario/edit/" + id,
+                    method: "PUT",
+                    data: {nome: formData.get('nome'), email: formData.get('email'),data_nascimento: formData.get('data_nascimento')},
+                    success: function(response) {
+                        alert("Salvo com sucesso");
+                        window.location.href = "/beneficiario";
+                    },
+                    error: function(response) {
+                        alert("Ocorreu algum erro ao salvar!");
+                    }
+                });
+            }else{
+                alert("Está faltando campos a serem preenchidos");
+            }
+        }
+        function validateEmail($email) {
+            var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+            return emailReg.test( $email );
+        }
+        function checkMaior18(nascimento){
+            let nasc = nascimento.split("-");
+            let hoje = new Date();
+
+            let ano = hoje.getFullYear() - nasc[0];
+            let mes = (hoje.getMonth() + 1) - nasc[1];
+            let dia = hoje.getDate() - nasc[2];
+
+            if(ano > 18){
+                return true;
+            }else if(mes < 0 && ano == 18){
+                return true;
+            }else if(dia >= 0 && ano == 18){
+                return 'd';
+            }else{
+                return true;
+            }
+        }
+    </script>
+{% endblock %}

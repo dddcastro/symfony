@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+    <h1>{{ title }}</h1>
+    <form class="row g-3 needs-validation novalidate">
+        <div class="mb-3">
+            <label for="inputnome" class="form-label">Nome</label>
+            <input type="text" id="inputnome" name="nome" class="form-control" value="{{ medico ? medico.nome : "" }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="inputespecialidade" class="form-label">Especialidade</label>
+            <input type="text" id="inputespecialidade" name="especialidade" class="form-control" value="{{ medico ? medico.especialidade : "" }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="inputhospital" class="form-label">Hospital</label>
+            <select id="inputhospital" name="hospital" class="form-control">
+                {% for hospital in hospitais %}
+                    <option value="{{ hospital.id }}" {{ medico ? (medico.hospital.id == hospital.id ? "selected" : "") : "" }}>{{ hospital.nome }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <a onclick="{{ medico ? "edit(#{medico.id});" : "add();" }}" class="btn btn-primary float-end">Salvar</a>
+    </form>
+{% endblock %}
+
+{% block bodyjs %}
+    <script>
+        function add() {
+            let formData = new FormData($("form")[0]);
+            let valid = true;
+
+            if(formData.get("nome") == "" || formData.get("nome").length < 3) {
+                $("#inputnome").addClass("is-invalid");
+                valid = false;
+            }else $("#inputnome").removeClass("is-invalid");
+
+            if(formData.get("especialidade") == ""  || formData.get("especialidade").length < 3) {
+                $("#inputespecialidade").addClass("is-invalid");
+                valid = false;
+            }else $("#inputespecialidade").removeClass("is-invalid");
+
+            if(formData.get("hospital") == "") {
+                $("#inputhospital").addClass("is-invalid");
+                valid = false;
+            }else $("#inputhospital").removeClass("is-invalid");
+
+            if(valid){
+                $.ajax({
+                    url: "/medico/add",
+                    method: "POST",
+                    data: {nome: formData.get('nome'), especialidade: formData.get('especialidade'), hospital: formData.get('hospital')},
+                    success: function(response) {
+                        alert("Salvo com sucesso");
+                        window.location.href = "/medico";
+                    },
+                    error: function(response) {
+                        alert("Ocorreu algum erro ao salvar!");
+                    }
+                });
+            }else{
+                alert("Está faltando campos a serem preenchidos");
+            }
+        }
+        function edit(id) {
+            let formData = new FormData($("form")[0]);
+            let valid = true;
+
+            if(formData.get("nome") == "" || formData.get("nome").length < 3) {
+                $("#inputnome").addClass("is-invalid");
+                valid = false;
+            }else $("#inputnome").removeClass("is-invalid");
+
+            if(formData.get("especialidade") == ""  || formData.get("especialidade").length < 3) {
+                $("#inputespecialidade").addClass("is-invalid");
+                valid = false;
+            }else $("#inputespecialidade").removeClass("is-invalid");
+
+            if(formData.get("hospital") == "") {
+                $("#inputhospital").addClass("is-invalid");
+                valid = false;
+            }else $("#inputhospital").removeClass("is-invalid");
+
+            if(valid){
+                $.ajax({
+                    url: "/medico/edit/" + id,
+                    method: "PUT",
+                    data: {nome: formData.get('nome'), especialidade: formData.get('especialidade'), hospital: formData.get('hospital')},
+                    success: function(response) {
+                        alert("Salvo com sucesso");
+                        window.location.href = "/medico";
+                    },
+                    error: function(response) {
+                        alert("Ocorreu algum erro ao salvar!");
+                    }
+                });
+            }else{
+                alert("Está faltando campos a serem preenchidos");
+            }
+        }
+    </script>
+{% endblock %}

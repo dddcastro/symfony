@@ -1,0 +1,20 @@
+{% if consultas %}
+    {% for consulta in consultas %}
+        <tr>
+            <td>{{ consulta.data|date("d/m/Y") }}</td>
+            <td>{{ consulta.status }}</td>
+            <td>{{ consulta.beneficiario.nome }}</td>
+            <td>{{ consulta.hospital.nome }}</td>
+            <td>{{ consulta.medico.nome }}</td>
+            <td class="text-end">
+                <a href="/consulta/form/{{ consulta.id }}" class="btn btn-info">Editar</a>
+                <a href="/observacao/{{ consulta.id }}" class="btn btn-info">Observações</a>
+                <a onclick="deletarConsulta({{ consulta.id }})" class="btn btn-danger">Excluir</a>
+            </td>
+        </tr>
+    {% endfor %}
+{% else %}
+    <tr>
+        <td colspan="6" class="text-center">Nenhum item cadastrado</td>
+    </tr>
+{% endif %}

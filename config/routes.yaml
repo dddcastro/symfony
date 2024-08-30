@@ -1,0 +1,191 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+
+index:
+    path: /
+    controller: App\Controller\ConsultaController::index
+    methods: GET
+
+hospital_index:
+    path:       /hospital
+    controller: App\Controller\HospitalController::index
+    methods:    GET
+
+hospital_show:
+    path: /hospital/show
+    controller: App\Controller\HospitalController::show
+    methods: GET
+
+hospital_form1:
+    path: /hospital/form
+    controller: App\Controller\HospitalController::form
+    methods: GET
+
+hospital_form:
+    path: /hospital/form/{id}
+    controller: App\Controller\HospitalController::form
+    methods: GET
+
+hospital_add:
+    path: /hospital/add
+    controller: App\Controller\HospitalController::add
+    methods: POST
+
+hospital_edit:
+    path: /hospital/edit/{id}
+    controller: App\Controller\HospitalController::edit
+    methods: PUT
+
+hospital_delete:
+    path: /hospital/delete/{id}
+    controller: App\Controller\HospitalController::delete
+    methods: DELETE
+
+
+
+beneficiario_index:
+    path:       /beneficiario
+    controller: App\Controller\BeneficiarioController::index
+    methods:    GET
+
+beneficiario_show:
+    path: /beneficiario/show
+    controller: App\Controller\BeneficiarioController::show
+    methods: GET
+
+beneficiario_form1:
+    path: /beneficiario/form
+    controller: App\Controller\BeneficiarioController::form
+    methods: GET
+
+beneficiario_form:
+    path: /beneficiario/form/{id}
+    controller: App\Controller\BeneficiarioController::form
+    methods: GET
+
+beneficiario_add:
+    path: /beneficiario/add
+    controller: App\Controller\BeneficiarioController::add
+    methods: POST
+
+beneficiario_edit:
+    path: /beneficiario/edit/{id}
+    controller: App\Controller\BeneficiarioController::edit
+    methods: PUT
+
+beneficiario_delete:
+    path: /beneficiario/delete/{id}
+    controller: App\Controller\BeneficiarioController::delete
+    methods: DELETE
+
+
+
+medico_index:
+    path:       /medico
+    controller: App\Controller\MedicoController::index
+    methods:    GET
+
+medico_show:
+    path: /medico/show
+    controller: App\Controller\MedicoController::show
+    methods: GET
+
+medico_form1:
+    path: /medico/form
+    controller: App\Controller\MedicoController::form
+    methods: GET
+
+medico_form:
+    path: /medico/form/{id}
+    controller: App\Controller\MedicoController::form
+    methods: GET
+
+medico_add:
+    path: /medico/add
+    controller: App\Controller\MedicoController::add
+    methods: POST
+
+medico_edit:
+    path: /medico/edit/{id}
+    controller: App\Controller\MedicoController::edit
+    methods: PUT
+
+medico_delete:
+    path: /medico/delete/{id}
+    controller: App\Controller\MedicoController::delete
+    methods: DELETE
+
+
+consulta_index:
+    path:       /consulta
+    controller: App\Controller\ConsultaController::index
+    methods:    GET
+
+consulta_show:
+    path: /consulta/show
+    controller: App\Controller\ConsultaController::show
+    methods: GET
+
+consulta_form1:
+    path: /consulta/form
+    controller: App\Controller\ConsultaController::form
+    methods: GET
+
+consulta_form:
+    path: /consulta/form/{id}
+    controller: App\Controller\ConsultaController::form
+    methods: GET
+
+consulta_add:
+    path: /consulta/add
+    controller: App\Controller\ConsultaController::add
+    methods: POST
+
+consulta_edit:
+    path: /consulta/edit/{id}
+    controller: App\Controller\ConsultaController::edit
+    methods: PUT
+
+consulta_delete:
+    path: /consulta/delete/{id}
+    controller: App\Controller\ConsultaController::delete
+    methods: DELETE
+
+
+observacao_index:
+    path:       /observacao/{consulta_id}
+    controller: App\Controller\ObservacaoController::index
+    methods:    GET
+
+observacao_show:
+    path: /observacao/show/{consulta_id}
+    controller: App\Controller\ObservacaoController::show
+    methods: GET
+
+observacao_form1:
+    path: /observacao/form/{consulta_id}
+    controller: App\Controller\ObservacaoController::form
+    methods: GET
+
+observacao_form:
+    path: /observacao/form/{consulta_id}/{id}
+    controller: App\Controller\ObservacaoController::form
+    methods: GET
+
+observacao_add:
+    path: /observacao/add
+    controller: App\Controller\ObservacaoController::add
+    methods: POST
+
+observacao_edit:
+    path: /observacao/edit/{id}
+    controller: App\Controller\ObservacaoController::edit
+    methods: POST
+
+observacao_delete:
+    path: /observacao/delete/{id}
+    controller: App\Controller\ObservacaoController::delete
+    methods: DELETE

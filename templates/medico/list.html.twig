@@ -1,0 +1,17 @@
+{% if medicos %}
+    {% for medico in medicos %}
+        <tr>
+            <td>{{ medico.nome }}</td>
+            <td>{{ medico.especialidade }}</td>
+            <td>{{ medico.hospital.nome }}</td>
+            <td class="text-end">
+                <a href="/medico/form/{{ medico.id }}" class="btn btn-info">Editar</a>
+                <a onclick="deletarMedico({{ medico.id }})" class="btn btn-danger">Excluir</a>
+            </td>
+        </tr>
+    {% endfor %}
+{% else %}
+    <tr>
+        <td colspan="3" class="text-center">Nenhum item cadastrado</td>
+    </tr>
+{% endif %}

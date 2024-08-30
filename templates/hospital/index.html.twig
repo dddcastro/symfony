@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+    <h1>{{ title }}<a href="/hospital/form" class="btn btn-primary float-end">Cadastrar novo</a></h1>
+    <table class="table">
+        <thead>
+            <th scope="col">nome</th>
+            <th scope="col">endereço</th>
+            <th scope="col" class="text-end">ações</th>
+        </thead>
+        <tbody>
+            <tr><td colspan="3" class="text-center">Carregando...</td></tr>
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block bodyjs %}
+    <script>
+        show();
+
+        function show(){
+            $.ajax({
+                url: "/hospital/show",
+                method: "GET",
+                type: "html",
+                success: function(response) {
+                    $(".table tbody").html("");
+                    $(".table tbody").html(response);
+                },
+                error: function(response) {
+                    console.log(response.responseJSON)
+                }
+            });
+        }
+
+        function deletarHospital(id){
+            if(confirm("Tem certeza que deseja excluir este item")){
+                $.ajax({
+                    url: "/hospital/delete/" + id,
+                    method: "DELETE",
+                    success: function(response) {
+                        alert("Excluido com sucesso.");
+                        show();
+                    },
+                    error: function(response) {
+                        alert(response.responseText.toString());
+                    }
+                });
+            }
+        }
+    </script>
+{% endblock %}

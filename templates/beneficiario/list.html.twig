@@ -1,0 +1,17 @@
+{% if beneficiarios %}
+    {% for beneficiario in beneficiarios %}
+        <tr>
+            <td>{{ beneficiario.nome }}</td>
+            <td>{{ beneficiario.email }}</td>
+            <td>{{ beneficiario.datanascimento|date("d/m/Y") }}</td>
+            <td class="text-end">
+                <a href="/beneficiario/form/{{ beneficiario.id }}" class="btn btn-info">Editar</a>
+                <a onclick="deletarBeneficiario({{ beneficiario.id }})" class="btn btn-danger">Excluir</a>
+            </td>
+        </tr>
+    {% endfor %}
+{% else %}
+    <tr>
+        <td colspan="3" class="text-center">Nenhum item cadastrado</td>
+    </tr>
+{% endif %}

@@ -1,0 +1,27 @@
+{% if observacoes %}
+    {% for observacao in observacoes %}
+        <tr>
+            <td>{{ observacao.descricao }}</td>
+            <td>
+                {% if observacao.anexo == "" %}
+                    Sem anexo
+                {% else %}
+                    <a href="/uploads/{{ observacao.anexo }}">Visualizar anexo</a>
+                {% endif %}
+            </td>
+            <td class="text-end">
+                {% if editavel %}
+                    <a href="/observacao/form/{{ consulta_id }}/{{ observacao.id }}" class="btn btn-info">Editar</a>
+                    <a href="/consulta/form/{{ observacao.consulta.id }}" class="btn btn-info">Consulta</a>
+                    <a target="_blank" onclick="deletarObservacao({{ observacao.id }})" class="btn btn-danger">Excluir</a>
+                {% else %}
+                    <a href="/consulta/form/{{ observacao.consulta.id }}" class="btn btn-info">Consulta</a>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+{% else %}
+    <tr>
+        <td colspan="3" class="text-center">Nenhum item cadastrado</td>
+    </tr>
+{% endif %}

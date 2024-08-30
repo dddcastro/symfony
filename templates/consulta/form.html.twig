@@ -1,0 +1,143 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+    <h1>{{ title }}</h1>
+    <form class="row g-3 needs-validation novalidate">
+        <div class="mb-3">
+            <label for="inputdata" class="form-label">Data</label>
+            <input type="date" id="inputdata" name="data" class="form-control" value="{{ consulta ? consulta.data|date("Y-m-d") : "" }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="inputstatus" class="form-label">Status</label>
+            <select id="inputstatus" name="status" class="form-control">
+                <option value="pendente">Pendente</option>
+                <option value="concluida">Concluida</option>
+                <option value="cancelada">Cancelada</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="inputbeneficiario" class="form-label">Beneficiario</label>
+            <select id="inputbeneficiario" name="beneficiario" class="form-control">
+                {% for beneficiario in beneficiarios %}
+                    <option value="{{ beneficiario.id }}" {{ consulta ? (consulta.beneficiario.id == beneficiario.id ? "selected" : "") : "" }}>{{ beneficiario.nome }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="inputmedico" class="form-label">Médico</label>
+            <select id="inputmedico" name="medico" class="form-control">
+                {% for medico in medicos %}
+                    <option value="{{ medico.id }}" {{ consulta ? (consulta.medico.id == medico.id ? "selected" : "") : "" }}>{{ medico.nome }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="inputhospital" class="form-label">Hospital</label>
+            <select id="inputhospital" name="hospital" class="form-control">
+                {% for hospital in hospitais %}
+                    <option value="{{ hospital.id }}" {{ consulta ? (consulta.hospital.id == hospital.id ? "selected" : "") : "" }}>{{ hospital.nome }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <a onclick="{{ consulta ? "edit(#{consulta.id});" : "add();" }}" class="btn btn-primary float-end">Salvar</a>
+    </form>
+{% endblock %}
+
+{% block bodyjs %}
+    <script>
+        function add() {
+            let formData = new FormData($("form")[0]);
+            let valid = true;
+
+            if(formData.get("data") == "" || formData.get("data").length < 3) {
+                $("#inputdata").addClass("is-invalid");
+                valid = false;
+            }else $("#inputdata").removeClass("is-invalid");
+
+            if(formData.get("status") == "") {
+                $("#inputstatus").addClass("is-invalid");
+                valid = false;
+            }else $("#inputstatus").removeClass("is-invalid");
+
+            if(formData.get("beneficiario") == "") {
+                $("#inputbeneficiario").addClass("is-invalid");
+                valid = false;
+            }else $("#inputbeneficiario").removeClass("is-invalid");
+
+            if(formData.get("hospital") == "") {
+                $("#inputhospital").addClass("is-invalid");
+                valid = false;
+            }else $("#inputhospital").removeClass("is-invalid");
+
+            if(formData.get("medico") == "") {
+                $("#inputmedico").addClass("is-invalid");
+                valid = false;
+            }else $("#inputmedico").removeClass("is-invalid");
+
+            if(valid){
+                $.ajax({
+                    url: "/consulta/add",
+                    method: "POST",
+                    data: {data: formData.get('data'), status: formData.get('status'), hospital: formData.get('hospital'), medico: formData.get('medico'), beneficiario: formData.get('beneficiario')},
+                    success: function(response) {
+                        alert("Salvo com sucesso");
+                        window.location.href = "/consulta";
+                    },
+                    error: function(response) {
+                        alert("Ocorreu algum erro ao salvar!");
+                    }
+                });
+            }else{
+                alert("Está faltando campos a serem preenchidos");
+            }
+        }
+        function edit(id) {
+            let formData = new FormData($("form")[0]);
+            let valid = true;
+
+            if(formData.get("data") == "" || formData.get("data").length < 3) {
+                $("#inputdata").addClass("is-invalid");
+                valid = false;
+            }else $("#inputdata").removeClass("is-invalid");
+
+            if(formData.get("status") == "") {
+                $("#inputstatus").addClass("is-invalid");
+                valid = false;
+            }else $("#inputstatus").removeClass("is-invalid");
+
+            if(formData.get("beneficiario") == "") {
+                $("#inputbeneficiario").addClass("is-invalid");
+                valid = false;
+            }else $("#inputbeneficiario").removeClass("is-invalid");
+
+            if(formData.get("hospital") == "") {
+                $("#inputhospital").addClass("is-invalid");
+                valid = false;
+            }else $("#inputhospital").removeClass("is-invalid");
+
+            if(formData.get("medico") == "") {
+                $("#inputmedico").addClass("is-invalid");
+                valid = false;
+            }else $("#inputmedico").removeClass("is-invalid");
+
+            if(valid){
+                $.ajax({
+                    url: "/consulta/edit/" + id,
+                    method: "PUT",
+                    data: {data: formData.get('data'), status: formData.get('status'), hospital: formData.get('hospital'), medico: formData.get('medico'), beneficiario: formData.get('beneficiario')},
+                    success: function(response) {
+                        alert("Salvo com sucesso");
+                        window.location.href = "/consulta";
+                    },
+                    error: function(response) {
+                        alert("Ocorreu algum erro ao salvar!");
+                    }
+                });
+            }else{
+                alert("Está faltando campos a serem preenchidos");
+            }
+        }
+    </script>
+{% endblock %}
